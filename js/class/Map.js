@@ -11,6 +11,9 @@ TDVN.Map = function (dimension/*[x,y]*/, size) {
     }
     var routes = [/*{x,y,axis,direction},{x,y,axis,direction}*/]; //position x,y relative to map by number of grid cell
 
+    //public props
+    this.size = size;
+
     /*
      * add new object to map
      * config: {
@@ -37,7 +40,7 @@ TDVN.Map = function (dimension/*[x,y]*/, size) {
             });
             if ( routeData.axis == 'x' ) {
                 routes.push({
-                    x: config.x+routeData.length-1,
+                    x: config.x + routeData.direction*(routeData.length-1),
                     y: config.y,
                     axis: routeData.axis,
                     direction: routeData.direction
@@ -55,7 +58,7 @@ TDVN.Map = function (dimension/*[x,y]*/, size) {
             else if ( routeData.axis == 'y' ) {
                 routes.push({
                     x: config.x,
-                    y: config.y+routeData.length-1,
+                    y: config.y + routeData.direction*(routeData.length-1),
                     axis: routeData.axis,
                     direction: routeData.direction
                 });
@@ -76,7 +79,7 @@ TDVN.Map = function (dimension/*[x,y]*/, size) {
     /*
      * return {x,y}
      */
-    var _getCreepNextCoord_ = function (type/*rear|inner*/, coord, nextCoord) {
+    var _getCreepNextCoord_ = function (type/*rear|inner*/, anchor, coord, nextCoord) {
         var creepCoord = {};
         if ( type == 'rear' ) {
             if ( coord.axis == 'x' ) {
@@ -86,16 +89,11 @@ TDVN.Map = function (dimension/*[x,y]*/, size) {
                 else {
                     creepCoord.x = coord.x;
                 }
-                creepCoord.y = coord.y;
+                creepCoord.y = anchor.y;
             } 
             else {  //coord.axis =='y'
-                creepCoord.x = coord.x;
-                if ( coord.x == nextCoord.x || coord.x - nextCoord.x == -1 ) {
-                    creepCoord.y = coord.direction > 0 ? nextCoord.y+1 : nextCoord.y;
-                }
-                else {
-                    creepCoord.y = coord.y;
-                }
+                creepCoord.x = anchor.x;
+                creepCoord.y = coord.direction > 0 ? nextCoord.y+1 : nextCoord.y;
             }
         }
         else { //type == 'inner'
@@ -106,16 +104,11 @@ TDVN.Map = function (dimension/*[x,y]*/, size) {
                 else {
                     creepCoord.x = coord.direction > 0 ? coord.x-1 : coord.x+1;
                 }
-                creepCoord.y = nextCoord.direction > 0 ? coord.y+1 : coord.y;
+                creepCoord.y = anchor.y;
             } 
             else {  //coord.axis =='y'
-                creepCoord.x = nextCoord.direction > 0 ? coord.x+1 : coord.x;
-                if ( coord.x == nextCoord.x || coord.x - nextCoord.x == -1 ) {
-                    creepCoord.y = coord.direction > 0 ? nextCoord.y : nextCoord.y+1;
-                }
-                else {
-                    creepCoord.y = coord.direction > 0 ? coord.y-1 : coord.y+1;
-                }
+                creepCoord.x = anchor.x;
+                creepCoord.y = coord.direction > 0 ? nextCoord.y : nextCoord.y+1;
             }
         }
         return creepCoord;
@@ -123,10 +116,10 @@ TDVN.Map = function (dimension/*[x,y]*/, size) {
     /*
      * return 'rear'|'inner'
      */
-    var _getCreepRunType_ = function (creepCurrentType, next1RouteDirection, next2RouteDirection) {
-        return next1RouteDirection*next2RouteDirection > 0 
-            ? (creepCurrentType == 'rear' ? 'inner' : 'rear')
-            : (creepCurrentType == 'rear' ? 'rear' : 'inner');
+    var _getCreepRunType_ = function (creepCurrentType, rDirection, next2RouteDirection) {
+        return rDirection*next2RouteDirection > 0
+            ? creepCurrentType == 'rear' ? 'inner' : 'rear'
+            : creepCurrentType;
     }
     
     /*
@@ -139,48 +132,68 @@ TDVN.Map = function (dimension/*[x,y]*/, size) {
         };
         var _creepUtil_ = function (rearType, innerType, r1/*end point*/, r2/*start point of next route to r1*/) {
             //console.log(rearType);
-            //console.log(_getCreepNextCoord_(rearType, r1, r2));
-            creepRoute.rear.push(_getCreepNextCoord_(rearType, r1, r2));
+            /*console.log(_getCreepNextCoord_(
+                rearType,
+                creepRoute.rear[creepRoute.rear.length-1],
+                r1,
+                r2
+            ));*/
+            creepRoute.rear.push(_getCreepNextCoord_(
+                rearType,
+                creepRoute.rear[creepRoute.rear.length-1],
+                r1,
+                r2
+            ));
 
             //console.log(innerType);
-            //console.log(_getCreepNextCoord_(innerType, r1, r2));
-            creepRoute.inner.push(_getCreepNextCoord_(innerType, r1, r2));
+            /*console.log(_getCreepNextCoord_(
+                innerType,
+                creepRoute.inner[creepRoute.inner.length-1],
+                r1,
+                r2
+            ));*/
+            creepRoute.inner.push(_getCreepNextCoord_(
+                innerType,
+                creepRoute.inner[creepRoute.inner.length-1],
+                r1,
+                r2
+            ));
         }
 
         //loop throught each route by its 'end {x,y}' point
-        for ( var i = 1; i < routes.length; i = i+4 ) {
+        var rearType = 'rear';
+        var innerType = 'inner';
+        for ( var i = 1; i < routes.length; i = i+2 ) {
             var r = routes[i];
-            var rearType = 'rear';
-            var innerType = 'inner';
-
-            if ( i+1 == routes.length ) {
+            if ( i+1 == routes.length ) { //no more routes left
                 //console.log(rearType);
                 //console.log({x: r.x, y: r.y});
                 //console.log(innerType);
                 //console.log(r.axis == 'x' ? {x: r.x, y: r.y+1} : {x: r.x+1, y: r.y});
                 return (function() {
-                    creepRoute.rear.push({x: r.x, y: r.y});
-                    creepRoute.inner.push(r.axis == 'x' ? {x: r.x, y: r.y+1} : {x: r.x+1, y: r.y});
+                    if ( r.axis == 'x' ) {
+                        creepRoute.rear.push({x: r.x, y: creepRoute.rear[creepRoute.rear.length-1].y});
+                        creepRoute.inner.push({x: r.x, y: creepRoute.inner[creepRoute.inner.length-1].y});
+                    }
+                    else { //r.axis== 'y'
+                        creepRoute.rear.push({x: creepRoute.rear[creepRoute.rear.length-1].x, y: r.y});
+                        creepRoute.inner.push({x: creepRoute.inner[creepRoute.inner.length-1].x, y: r.y});
+                    }
                     return creepRoute;
                 })();
             }
-            var rNext1 = routes[i+1]; //get 'start' point of next route
-            if ( i+3 == routes.length ) {
-                return (function() {
-                    _creepUtil_(rearType, innerType, r, rNext1);
-                    return creepRoute;
-                })();
+            else {
+                var rNext1 = routes[i+1]; //get 'start' point of next route
+                var rNext1EndPoint = routes[i+2]; //get 'end' point of next route
+                //run on current route
+                _creepUtil_(rearType, innerType, r, rNext1);
+                if ( i+3 < routes.length ) { //has more than 1 route left(>= 2)
+                    var rNext2 = routes[i+3]; //get 'start' point of next-next route
+                    //go on the next route, after turning right|left -> get rearType and innerType for next route
+                    rearType = _getCreepRunType_(rearType, r.direction, rNext2.direction);
+                    innerType = _getCreepRunType_(innerType, r.direction, rNext2.direction);
+                }
             }
-            var rNext1EndPoint = routes[i+2]; //get 'end' point of next route
-            var rNext2 = routes[i+3]; //get 'start' point of next-next route
-            
-            //run on current route
-            _creepUtil_(rearType, innerType, r, rNext1);
-
-            //go on the next route, after turning right|left
-            rearType = _getCreepRunType_(rearType, rNext1.direction, rNext2.direction);
-            innerType = _getCreepRunType_(innerType, rNext1.direction, rNext2.direction);
-            _creepUtil_(rearType, innerType, rNext1EndPoint, rNext2);
         }
         return creepRoute;
     }
@@ -189,29 +202,43 @@ TDVN.Map = function (dimension/*[x,y]*/, size) {
      */
     this.pathToPosition = function (creepRoute, creepHome) {
         //IMPORTANT: TweenLite.bezier.values use 'x', 'y' not the 'left', 'top' value, so we need to re-ajust x, y
+        var pos = {
+            rear: [],
+            inner: []
+        };
+        var anchor = $('<div style="width:25px;height:25px;position:absolute;z-index:2;text-align:center;line-height:25px;"></div>"');
         $.each(creepRoute.rear, function () {
-            this.x = (this.x-2)*size;
-            this.y = (this.y-2)*size;
+            var left = (this.x-1)*size;
+            var top = (this.y-1)*size;
+            pos.rear.push({
+                left: left,
+                top: top
+            });
 
-            var c = $('<div style="width:25px;height:25px;background:#ccc;position:absolute;z-index:2;text-align:center;line-height:25px;">1</div>"');
-            c.clone().css({
-                left: this.x+1*size,
-                top: this.y+1*size
+            anchor.clone().addClass('RearPathMarker').text($('.RearPathMarker').length == 0 ? 1 : 'x').css({
+                background: '#ccc',
+                left: left,
+                top: top
             }).appendTo(map);
         });
         $.each(creepRoute.inner, function () {
-            this.x = (this.x-2)*size;
-            this.y = (this.y-3)*size;
+            var left = (this.x-1)*size;
+            var top = (this.y-1)*size;
+            pos.inner.push({
+                left: left,
+                top: top
+            });
 
-            var c = $('<div style="width:25px;height:25px;background:#eee;position:absolute;z-index:2;text-align:center;line-height:25px;">2</div>"');
-            c.clone().css({
-                left: this.x+1*size,
-                top: this.y+2*size
+            anchor.clone().addClass('InnerPathMarker').text($('.InnerPathMarker').length == 0 ? 2 : 'x').css({
+                background: '#eee',
+                left: left,
+                top: top
             }).appendTo(map);
         });
-        return creepRoute;
+        return pos;
     }
     /*
+     * bind a creep to a path and start running
      * creep -> 'Creep' object
      */
     this.bindRoute = function (creep, creepRoute) {
@@ -220,18 +247,17 @@ TDVN.Map = function (dimension/*[x,y]*/, size) {
         for ( var i = 0; i < routes.length-1; i++ ) { //calculate total time for a creep run on total routes
             var point1 = routes[i];
             var point2 = routes[i+1];
-            var deltaX = point2.x - point1.x;
-            var deltaY = point2.y - point1.y;
+            var deltaX = Math.abs(point2.x - point1.x);
+            var deltaY = Math.abs(point2.y - point1.y);
             delta += deltaX != 0 ? deltaX : deltaY;
         }
         //console.log(creepRoute);
         //return false;
-        TweenLite.to(creep.obj, delta/creep.getProps('speed'), {
+        TweenLite.to(creep.obj.removeClass('Hidden'), delta/creep.getProps('speed'), {
             bezier: {
                 curviness: 0,
-                timeResolution: 20,
-                values: creepRoute,
-                autoRotate: true
+                timeResolution: 6,
+                values: creepRoute
             },
             ease: Linear.easeNone,
             onUpdate: function () {

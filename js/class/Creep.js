@@ -19,7 +19,7 @@ TDVN.Creep = function (type, config) {
 
     return function () {
         options = $.extend(true, options, config);
-        self.obj = $('<div class="Creep '+type+'">'+options.blood+'&nbsp;&gt;</div>');
+        self.obj = $('<div class="Hidden Creep '+type+'">'+options.blood+'</div>');
         TDVN.Mediator.installTo(self);
         self.sub('towerFired', function (damage, lockedTargetUUID) {
             if ( lockedTargetUUID.indexOf(self.uuid) > -1 ) {
@@ -27,7 +27,7 @@ TDVN.Creep = function (type, config) {
 
                 //console.log('Creep', self.obj.text(), '\'s blood decreased by', damage - options.shield);
                 options.blood -= (damage - options.shield);
-                self.obj.html(options.blood+'&nbsp;&gt;');
+                self.obj.html(options.blood);
                 if ( options.blood <= 0 ) {
                     self.pub('creepDestroyed', self);
                     self.obj.remove();

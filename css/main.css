@@ -3,6 +3,9 @@ body {
     margin: 0;
     padding: 0;
 }
+.Hidden {
+    display: none;
+}
 /* MAP + ROUTE */
 #tdvnMap {
     border: 1px solid red;
@@ -51,6 +54,13 @@ body {
     position: absolute;
     z-index: 2;
 }
+.Bullet {
+    width: 3px;
+    height: 3px;
+    position: absolute;
+    z-index: 4;
+    background: #000;
+}
 .MagicTower {
     background: #90a;
 }
@@ -72,4 +82,22 @@ body {
     line-height: 25px;
     color: #fff;
     font-weight: bold;
+    font-size: 10px;
+    border-radius: 25px;
+    -moz-border-radius: 25px;
+    -webkit-border-radius: 25px;
+}
+
+.StartBtn {
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#4d90fe),to(#4787ed));
+    background-image: -webkit-linear-gradient(top,#4d90fe,#4787ed);
+    background-image: linear-gradient(top,#4d90fe,#4787ed);
+    background-color: #4d90fe;
+    border: 1px solid #3079ed;
+    font-size: 16px;
+    color: #fff;
+    padding: 8px 15px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
 }

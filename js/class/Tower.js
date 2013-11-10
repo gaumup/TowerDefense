@@ -29,8 +29,42 @@ TDVN.Tower = function (type, config) {
     var _startFiring = function () {
         if ( isFired ) { return false; }
         isFired = true;
+        var bullet = $('<div class="Bullet"></div>');
+        var towerPos = self.obj.offset();
+        var _firingFunc_ = function () {
+            $.each(targetQueue, function (index, creep) {
+                var creepPos = creep.obj.offset();
+                var creepAjustment = {x: Math.round(creep.obj.width()/2), y: Math.round(creep.obj.height()/2)};
+                var clonedBullet = bullet.clone();
+                clonedBullet.appendTo('body').css({
+                    top: towerPos.top + TDVN.MapLoader.config.size - 1,
+                    left: towerPos.left + TDVN.MapLoader.config.size - 1,
+                });
+                TweenLite.to(
+                    clonedBullet, 
+                    0.1, 
+                    {
+                        left: creepPos.left + creepAjustment.x,
+                        top: creepPos.top + creepAjustment.y,
+                        onComplete: function () {
+                            //publish 'fired' at creep
+                            self.pub('towerFired', options.damage, lockedTargetUUID);
+                            creep.obj.append(clonedBullet.css({
+                                left: creepAjustment.x,
+                                top: creepAjustment.y
+                            }));
+                            setTimeout(function () {
+                                clonedBullet.remove();
+                            }, 500);
+                        }
+                    }
+                );
+            });
+        }
+        //fire for 1st time, then loop in the interval
+        _firingFunc_();
         towerInterval = setInterval(function () {
-            self.pub('towerFired', options.damage, lockedTargetUUID);
+            _firingFunc_();
         }, Math.round(1000/options.speed));
     }
     var _stopFiring = function () {
@@ -67,21 +101,14 @@ TDVN.Tower = function (type, config) {
         options = $.extend(true, options, config);
         self.obj = $('<div class="Tower '+type+'"></div>');
         self.obj.on('click', function (e) {
+            //alert('Show|Hide tower effects list');
             e.stopPropagation();
         });
         var towerRange = $('<div class="TowerRange"></div>');
-        self.obj.on('mouseenter', function (e) {
-            //alert('Show tower effects list');
-            return false;
-        });
-        self.obj.on('mouseleave', function (e) {
-            //alert('Hide tower effects list');
-            return false;
-        });
         TDVN.Mediator.installTo(self);
         self.sub('creepRunning', function (creep) {
-            var x = Math.round(creep.obj.position().left/25)+1;
-            var y = Math.round(creep.obj.position().top/25)+1;
+            var x = Math.round(creep.obj.position().left/TDVN.MapLoader.config.size)+1;
+            var y = Math.round(creep.obj.position().top/TDVN.MapLoader.config.size)+1;
             var creepLockedTargetIndex = lockedTargetUUID.indexOf(creep.uuid);
             if ( damageArea.indexOf(String(x).concat(y)) > -1 ) { //creep is in damage area
                 //console.log('Hit creep at', String(x).concat(y));
@@ -89,7 +116,9 @@ TDVN.Tower = function (type, config) {
                     lockedTargetUUID.push(creep.uuid);
                     targetQueue.push(creep);
                 }
-                _startFiring();
+                if ( targetQueue.length > 0 ) {
+                    _startFiring();
+                }
             }
             else { //creep is not in damage area
                 if ( creepLockedTargetIndex > -1 ) { //creep already in damage area and escaped :)

@@ -2,10 +2,21 @@ jQuery(document).ready(function () {
     (function ($) {
         var startBtn = $('<button id="startBtn" class="StartBtn">Creep run</button>').appendTo('body');
 
-        //1.MAP -> create a map: 32,16 grid with cell size dependant on screen height(fit screen height)
+        //1.MAP -> create a map: 32,16 grid with cell size 25x25
         var mapConfig = TDVN.MapLoader.config;
         var map = new TDVN.Map([mapConfig.x, mapConfig.y], mapConfig.size);
-        
+        /*
+         * [
+         *    1, //left->right then top->down
+         *    2, //left->right then bottom->up
+         *    3, //right->left then top->down
+         *    4, //right->left then bottom->up
+         *    5, //top->down then left->right
+         *    6, //top->down then right->left
+         *    7, //bottom->up then left->right
+         *    8, //bottom->up then right->left
+         * ]
+        */
         //for debug only, show map grid guides
         var cell = $('<div class="GridCell"></div>');
         var j = 0;
@@ -18,11 +29,12 @@ jQuery(document).ready(function () {
 
         //**ROUTE -> create some routes
         //new TDVN.MapRuute(startPoint/*object{x,y}*/, length, axis/*String x|y*/, direction)
-        var route1 = new TDVN.MapRoute({x: 2, y: 2}, 13, 'x', 1);
-        var route2 = new TDVN.MapRoute({x: 15, y: 2}, 6, 'y', 1);
-        var route3 = new TDVN.MapRoute({x: 17, y: 6}, 8, 'x', 1);
-        var route4 = new TDVN.MapRoute({x: 25, y: 6}, 8, 'y', 1);
-        var route5 = new TDVN.MapRoute({x: 27, y: 12}, 4, 'x', 1);
+        var route1 = new TDVN.MapRoute({x: 26, y: 14}, 8, 'y', -1);
+        var route2 = new TDVN.MapRoute({x: 25, y: 7}, 6, 'x', -1);
+        var route3 = new TDVN.MapRoute({x: 18, y: 7}, 5, 'y', 1);
+        var route4 = new TDVN.MapRoute({x: 19, y: 12}, 9, 'x', -1);
+        var route5 = new TDVN.MapRoute({x: 9, y: 13}, 11, 'y', -1);
+        var route6 = new TDVN.MapRoute({x: 8, y: 3}, 6, 'x', -1);
         //add created routes to map
         map.add({ //route 1
             object: route1,
@@ -54,12 +66,19 @@ jQuery(document).ready(function () {
             x: route5.data('x'),
             y: route5.data('y')
         });
+        map.add({ //route 6
+            object: route6,
+            isRoute: true,
+            x: route6.data('x'),
+            y: route6.data('y')
+        });
 
         //2.TOWER PLACEHOLDER -> create some placeholder for tower
-        var placholderTower1 = new TDVN.MapTower({x: 6, y: 4});
-        var placholderTower2 = new TDVN.MapTower({x: 17, y: 2});
-        var placholderTower3 = new TDVN.MapTower({x: 17, y: 8});
-        var placholderTower4 = new TDVN.MapTower({x: 23, y: 8});
+        var placholderTower1 = new TDVN.MapTower({x: 24, y: 9});
+        var placholderTower2 = new TDVN.MapTower({x: 16, y: 7});
+        var placholderTower3 = new TDVN.MapTower({x: 16, y: 14});
+        var placholderTower4 = new TDVN.MapTower({x: 9, y: 14});
+        var placholderTower5 = new TDVN.MapTower({x: 7, y: 5});
         //add created routes to map
         map.add({ //placeholder tower 1
             object: placholderTower1.obj,
@@ -80,6 +99,11 @@ jQuery(document).ready(function () {
             object: placholderTower4.obj,
             x: placholderTower4.x,
             y: placholderTower4.y
+        });
+        map.add({ //placeholder tower 5
+            object: placholderTower5.obj,
+            x: placholderTower5.x,
+            y: placholderTower5.y
         });
         
         //3a.TOWER -> define tower class called 'MagicTower'
@@ -109,7 +133,8 @@ jQuery(document).ready(function () {
         var mTower3 = IncredibleTower.create();
         //add some MagicTower to placeholder tower on map
         placholderTower3.build(mTower3);
-        
+
+        //4.CREEP
         var route1Data = route1.data();
         //creepHome: 0 -> rear, 1 -> inner
         /*
@@ -134,7 +159,7 @@ jQuery(document).ready(function () {
             [{x: route1Data.x, y: route1Data.y}, {x: route1Data.x, y: route1Data.y+1}], //3
             [{x: route1Data.x, y: route1Data.y+1}, {x: route1Data.x, y: route1Data.y}] //4
         ]
-        creepHome = creepHome[3];
+        creepHome = creepHome[2];
 
         //4a.CREEP -> define some kind of Creep -> NormalCreep
         TDVN.CreepFactory.define('NormalCreep', {
@@ -231,7 +256,7 @@ jQuery(document).ready(function () {
         TDVN.CreepQueue.push(nCreep10);
         TDVN.CreepQueue.push(nCreep11);
 
-        //6. CREEP -> start running
+        //6. CREEP RUNNING -> start running
         var creepRoute = map.pathToPosition(map.getCreepPath(creepHome), creepHome);
         startBtn.on('click', function (e) {
             startBtn.remove();

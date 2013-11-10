@@ -1,0 +1,22 @@
+#testcases {
+    width: 100%;
+    overflow: hidden;
+    text-align: center;
+}
+    #testcases li {
+        display: inline;
+    }
+        #testcases li a {
+            color: #333;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 0 10px;
+        }
+        #testcases li a:hover {
+            color: #999;
+        }
+        #testcases li.Active a,
+        #testcases li.Active a:hover {
+            background: #ccc;
+        }
