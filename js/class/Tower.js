@@ -60,7 +60,7 @@ TDVN.Tower = function (type, config) {
                 );
                 TweenLite.to( //then fire
                     clonedBullet, 
-                    0.1, 
+                    0.2, 
                     {
                         left: toPos.left,
                         top: toPos.top,
@@ -75,7 +75,7 @@ TDVN.Tower = function (type, config) {
                             }));
                             setTimeout(function () {
                                 clonedBullet.remove();
-                            }, 500);
+                            }, 100);
                         }
                     }
                 );

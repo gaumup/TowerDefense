@@ -4,7 +4,7 @@ body {
     padding: 0;
 }
 .Hidden {
-    display: none;
+    xdisplay: none;
 }
 /* MAP + ROUTE */
 #tdvnMap {
@@ -80,7 +80,7 @@ body {
 .Creep {
     width: 25px;
     height: 25px;
-    background: #f00;
+    background: #B95815;
     position: absolute;
     z-index: 3;
     box-sizing: border-box;
@@ -108,4 +108,46 @@ body {
     position: absolute;
     top: 10px;
     right: 10px;
+}
+
+.Rear {
+    animation: rearMove 40s linear;
+    -webkit-animation: rearMove 40s linear; /* Safari and Chrome */
+}
+@keyframes rearMove {
+    0 {left: 25px; top: 25px}
+    37% {left: 375px; top: 25px}
+    47% {left: 375px; top: 125px}
+    73% {left: 625px; top: 125px}
+    88% {left: 625px; top: 275px}
+    100% {left: 725px; top: 275px} 
+}
+@-webkit-keyframes rearMove { /* Safari and Chrome */
+    0 {left: 25px; top: 25px}
+    37% {left: 375px; top: 25px}
+    47% {left: 375px; top: 125px}
+    73% {left: 625px; top: 125px}
+    88% {left: 625px; top: 275px}
+    100% {left: 725px; top: 275px} 
+}
+
+.Inner {
+    animation: innerMove 40s linear;
+    -webkit-animation: innerMove 40s linear; /* Safari and Chrome */
+}
+@keyframes innerMove {
+    0 {left: 25px; top: 50px}
+    20% {left: 350px; top: 50px}
+    40% {left: 350px; top: 150px}
+    60% {left: 600px; top: 150px}
+    80% {left: 600px; top: 300px}
+    100% {left: 725px; top: 300px}
+}
+@-webkit-keyframes innerMove { /* Safari and Chrome */
+    0 {left: 25px; top: 50px}
+    20% {left: 350px; top: 50px}
+    40% {left: 350px; top: 150px}
+    60% {left: 600px; top: 150px}
+    80% {left: 600px; top: 300px}
+    100% {left: 725px; top: 300px}
 }

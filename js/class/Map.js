@@ -250,20 +250,23 @@ TDVN.Map = function (dimension/*[x,y]*/, size) {
             var deltaX = Math.abs(point2.x - point1.x);
             var deltaY = Math.abs(point2.y - point1.y);
             delta += deltaX != 0 ? deltaX : deltaY;
-        }
-        //console.log(axis);
-        //return false;
+        }/*
+        creep.obj.removeClass('Hidden').addClass(creepRoute == 'rear' ? 'Rear' : 'Inner');
+        setInterval(function () {
+            creep.pub('creepRunning', creep);
+        }, 500);
+        return false;*/
         TweenLite.to(creep.obj.removeClass('Hidden'), delta/creep.getProps('speed'), {
             bezier: {
                 curviness: 0,
                 timeResolution: 6,
                 values: creepRoute
             },
-            ease: Linear.easeNone,
-            onUpdate: function () {
-                creep.pub('creepRunning', creep);
-            }
+            ease: Linear.easeNone
         });
+        setInterval(function () {
+            creep.pub('creepRunning', creep);
+        }, 500);
     }
 
     return function () {

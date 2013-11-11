@@ -194,6 +194,15 @@ jQuery(document).ready(function () {
         var nCreep9 = SuperCreep.create();
         var nCreep10 = SuperCreep.create();
         var nCreep11 = SuperCreep.create();
+        var nCreep12 = SuperCreep.create();
+        var nCreep13 = SuperCreep.create();
+        var nCreep14 = SuperCreep.create();
+        var nCreep15 = SuperCreep.create();
+        var nCreep16 = SuperCreep.create();
+        var nCreep17 = SuperCreep.create();
+        var nCreep18 = SuperCreep.create();
+        var nCreep19 = SuperCreep.create();
+        var nCreep20 = SuperCreep.create();
         map.add({ //creep 7
             object: nCreep7.obj,
             x: creepHome[0].x,
@@ -211,13 +220,58 @@ jQuery(document).ready(function () {
         });
         map.add({ //creep 10
             object: nCreep10.obj,
-            x: creepHome[0].x,
-            y: creepHome[0].y
+            x: creepHome[1].x,
+            y: creepHome[1].y
         });
         map.add({ //creep 11
             object: nCreep11.obj,
             x: creepHome[0].x,
             y: creepHome[0].y
+        });
+        map.add({ //creep 12
+            object: nCreep12.obj,
+            x: creepHome[1].x,
+            y: creepHome[1].y
+        });
+        map.add({ //creep 13
+            object: nCreep13.obj,
+            x: creepHome[0].x,
+            y: creepHome[0].y
+        });
+        map.add({ //creep 14
+            object: nCreep14.obj,
+            x: creepHome[1].x,
+            y: creepHome[1].y
+        });
+        map.add({ //creep 15
+            object: nCreep15.obj,
+            x: creepHome[0].x,
+            y: creepHome[0].y
+        });
+        map.add({ //creep 16
+            object: nCreep16.obj,
+            x: creepHome[1].x,
+            y: creepHome[1].y
+        });
+        map.add({ //creep 17
+            object: nCreep17.obj,
+            x: creepHome[0].x,
+            y: creepHome[0].y
+        });
+        map.add({ //creep 18
+            object: nCreep18.obj,
+            x: creepHome[1].x,
+            y: creepHome[1].y
+        });
+        map.add({ //creep 19
+            object: nCreep19.obj,
+            x: creepHome[0].x,
+            y: creepHome[0].y
+        });
+        map.add({ //creep 20
+            object: nCreep20.obj,
+            x: creepHome[1].x,
+            y: creepHome[1].y
         });
         
         //5.CREEP -> push created creep into queue
@@ -232,6 +286,15 @@ jQuery(document).ready(function () {
         TDVN.CreepQueue.push(nCreep9);
         TDVN.CreepQueue.push(nCreep10);
         TDVN.CreepQueue.push(nCreep11);
+        TDVN.CreepQueue.push(nCreep12);
+        TDVN.CreepQueue.push(nCreep13);
+        TDVN.CreepQueue.push(nCreep14);
+        TDVN.CreepQueue.push(nCreep15);
+        TDVN.CreepQueue.push(nCreep16);
+        TDVN.CreepQueue.push(nCreep17);
+        TDVN.CreepQueue.push(nCreep18);
+        TDVN.CreepQueue.push(nCreep19);
+        TDVN.CreepQueue.push(nCreep20);
 
         //6. CREEP -> start running
         var creepRoute = map.pathToPosition(map.getCreepPath(creepHome), creepHome);
@@ -240,6 +303,7 @@ jQuery(document).ready(function () {
             TDVN.CreepQueue.flush(1, function (creeps) {
                 $.each(creeps, function (index, creep) {
                     map.bindRoute(creep, creepRoute[index%2 == 0 ? 'rear' : 'inner']);
+                    //map.bindRoute(creep, index%2 == 0 ? 'rear' : 'inner');
                     //map.bindRoute(creep, creepRoute['inner']);
                 });
             });
