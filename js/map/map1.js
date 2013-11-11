@@ -93,9 +93,11 @@ jQuery(document).ready(function () {
         //init some MagicTower
         var mTower1 = MagicTower.create();
         var mTower2 = MagicTower.create();
+        var mTower3 = MagicTower.create();
         //add some MagicTower to placeholder tower on map
         placholderTower1.build(mTower1);
         placholderTower2.build(mTower2);
+        placholderTower4.build(mTower3);
 
         //3b.TOWER -> define tower class called 'IncredibleTower'
         TDVN.TowerFactory.define('IncredibleTower', {

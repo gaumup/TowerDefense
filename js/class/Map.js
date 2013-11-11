@@ -251,7 +251,7 @@ TDVN.Map = function (dimension/*[x,y]*/, size) {
             var deltaY = Math.abs(point2.y - point1.y);
             delta += deltaX != 0 ? deltaX : deltaY;
         }
-        //console.log(creepRoute);
+        //console.log(axis);
         //return false;
         TweenLite.to(creep.obj.removeClass('Hidden'), delta/creep.getProps('speed'), {
             bezier: {

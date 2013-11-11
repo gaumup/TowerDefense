@@ -29,26 +29,46 @@ TDVN.Tower = function (type, config) {
     var _startFiring = function () {
         if ( isFired ) { return false; }
         isFired = true;
-        var bullet = $('<div class="Bullet"></div>');
+        var bullet = $('<div class="Bullet"><span></span></div>');
         var towerPos = self.obj.offset();
         var _firingFunc_ = function () {
             $.each(targetQueue, function (index, creep) {
                 var creepPos = creep.obj.offset();
                 var creepAjustment = {x: Math.round(creep.obj.width()/2), y: Math.round(creep.obj.height()/2)};
                 var clonedBullet = bullet.clone();
-                clonedBullet.appendTo('body').css({
-                    top: towerPos.top + TDVN.MapLoader.config.size - 1,
+                var fromPos = {
                     left: towerPos.left + TDVN.MapLoader.config.size - 1,
-                });
-                TweenLite.to(
+                    top: towerPos.top + TDVN.MapLoader.config.size - 1
+                }
+                clonedBullet.appendTo('body').css(fromPos);
+
+                var toPos = {
+                    left: creepPos.left + creepAjustment.x,
+                    top: creepPos.top + creepAjustment.y,
+                }
+                var a1 = toPos.left-fromPos.left;
+                var a2 = toPos.top-fromPos.top;
+                var b1 = 0;
+                var b2 = -15;
+                var rotation = Math.acos((a1*b1 + a2*b2)/(Math.sqrt(Math.pow(a1,2)+Math.pow(a2,2))*Math.sqrt(Math.pow(b1,2)+Math.pow(b2,2))))*180/Math.PI;
+                var z = a1*b2 - a2*b1; //matrix multiplication
+                z = Math.abs(z)/z;
+                TweenLite.to( //rotate to target at creep
+                    clonedBullet,
+                    0,
+                    { rotation: -z*rotation }
+                );
+                TweenLite.to( //then fire
                     clonedBullet, 
                     0.1, 
                     {
-                        left: creepPos.left + creepAjustment.x,
-                        top: creepPos.top + creepAjustment.y,
+                        left: toPos.left,
+                        top: toPos.top,
                         onComplete: function () {
                             //publish 'fired' at creep
                             self.pub('towerFired', options.damage, lockedTargetUUID);
+                            
+                            //append bullet to creep
                             creep.obj.append(clonedBullet.css({
                                 left: creepAjustment.x,
                                 top: creepAjustment.y

@@ -59,8 +59,16 @@ body {
     height: 3px;
     position: absolute;
     z-index: 4;
-    background: #000;
 }
+    .Bullet span {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: -3px;
+        width: 7px;
+        height: 15px;
+        background: url(../images/arrow.png) no-repeat 0 0;
+    }
 .MagicTower {
     background: #90a;
 }
