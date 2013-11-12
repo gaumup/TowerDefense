@@ -60,7 +60,7 @@ body {
     position: absolute;
     z-index: 4;
 }
-    .Bullet span {
+    .Bullet.MagicTower span {
         display: block;
         position: absolute;
         top: 0;
@@ -68,6 +68,15 @@ body {
         width: 7px;
         height: 15px;
         background: url(../images/arrow.png) no-repeat 0 0;
+    }
+    .Bullet.IncredibleTower span {
+        display: block;
+        position: absolute;
+        width: 5px;
+        height: 5px;
+        top: 0;
+        left: -2px;
+        background: #f00;
     }
 .MagicTower {
     background: #90a;

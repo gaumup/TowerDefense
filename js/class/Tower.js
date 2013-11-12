@@ -29,7 +29,7 @@ TDVN.Tower = function (type, config) {
     var _startFiring = function () {
         if ( isFired ) { return false; }
         isFired = true;
-        var bullet = $('<div class="Bullet"><span></span></div>');
+        var bullet = $('<div class="Bullet '+type+'"><span></span></div>');
         var towerPos = self.obj.offset();
         var _firingFunc_ = function () {
             $.each(targetQueue, function (index, creep) {
