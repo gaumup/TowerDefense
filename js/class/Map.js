@@ -262,7 +262,10 @@ TDVN.Map = function (dimension/*[x,y]*/, size) {
                 timeResolution: 6,
                 values: creepRoute
             },
-            ease: Linear.easeNone
+            ease: Linear.easeNone,
+            onComplete: function () {
+                TDVN.Mediator.pub('creepEscaped');
+            }
         });
         setInterval(function () {
             creep.pub('creepRunning', creep);
