@@ -258,7 +258,7 @@ jQuery(document).ready(function () {
         var activeTowerPlaceHolder;
         //6a. event on map tower placeholder
         var mapTowerPlaceholders = $('.MapTower');
-        mapTowerPlaceholders.on('click touchstart', function (e) {
+        mapTowerPlaceholders.on('click', function (e) {
             var $target = $(e.currentTarget);
             if ( $target.hasClass('Disabled') ) { return false; }
             activeTowerPlaceHolder = $target.data('placeholderIndex');
@@ -271,7 +271,7 @@ jQuery(document).ready(function () {
         
         //6b. event tower type choice
         circleTower
-            .on('click touchstart', 'a.TowerGroupType', function (e) {
+            .on('click', 'a.TowerGroupType', function (e) {
                 var tower = $(this);
                 var towerName = tower.attr('class');
                 circleTower.removeClass('Active');
@@ -303,7 +303,7 @@ jQuery(document).ready(function () {
                 circleTower.empty().append(liEl).addClass('Active')
                 return false;
             })
-            .on('click touchstart', 'a.TowerType', function (e) {
+            .on('click', 'a.TowerType', function (e) {
                 circleTower.removeClass('Active');
                 mapTowerPlaceholders.eq(activeTowerPlaceHolder).css('background', 'none');
                 towerPlacholder[activeTowerPlaceHolder].build(window[$(e.currentTarget).data('towerClass')].create());
@@ -312,7 +312,7 @@ jQuery(document).ready(function () {
 
 
         //6c. event on document
-        $(document).on('click touchstart', function (e) {
+        $(document).on('click', function (e) {
             circleTower.removeClass('Active');
         });
 
@@ -322,7 +322,7 @@ jQuery(document).ready(function () {
         });
         var creepRoute = map.pathToPosition(map.getCreepPath(creepHome), creepHome);
         var startBtn = $('<button id="startBtn" class="StartBtn">Creep run</button>').appendTo('body');
-        startBtn.on('click touchstart', function (e) {
+        startBtn.on('click', function (e) {
             startBtn.remove();
             $('.MapTower').addClass('Disabled');
             circleTower.removeClass('Active');
