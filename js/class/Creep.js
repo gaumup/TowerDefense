@@ -30,6 +30,7 @@ TDVN.Creep = function (type, config) {
                 self.obj.html(options.blood);
                 if ( options.blood <= 0 ) {
                     self.pub('creepDestroyed', self);
+                    TweenLite.killTweensOf(self.obj);
                     self.obj.remove();
                 }
             }

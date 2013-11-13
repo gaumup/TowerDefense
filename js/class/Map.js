@@ -264,7 +264,7 @@ TDVN.Map = function (dimension/*[x,y]*/, size) {
             },
             ease: Linear.easeNone,
             onComplete: function () {
-                TDVN.Mediator.pub('creepEscaped');
+                TDVN.Mediator.pub('creepEscaped', creep);
             }
         });
         setInterval(function () {
