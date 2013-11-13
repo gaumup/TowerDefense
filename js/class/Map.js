@@ -206,7 +206,7 @@ TDVN.Map = function (dimension/*[x,y]*/, size) {
             rear: [],
             inner: []
         };
-        var anchor = $('<div style="width:25px;height:25px;position:absolute;z-index:2;text-align:center;line-height:25px;"></div>"');
+        var anchor = $('<div style="width:'+TDVN.MapLoader.config.size+'px;height:'+TDVN.MapLoader.config.size+'px;position:absolute;z-index:2;text-align:center;line-height:'+TDVN.MapLoader.config.size+'px;"></div>"');
         $.each(creepRoute.rear, function () {
             var left = (this.x-1)*size;
             var top = (this.y-1)*size;
@@ -215,11 +215,13 @@ TDVN.Map = function (dimension/*[x,y]*/, size) {
                 top: top
             });
 
-            anchor.clone().addClass('RearPathMarker').text($('.RearPathMarker').length == 0 ? 1 : 'x').css({
-                background: '#ccc',
-                left: left,
-                top: top
-            }).appendTo(map);
+            if ( TDVN.debug ) {
+                anchor.clone().addClass('RearPathMarker').text($('.RearPathMarker').length == 0 ? 1 : 'x').css({
+                    background: '#ccc',
+                    left: left,
+                    top: top
+                }).appendTo(map);
+            }
         });
         $.each(creepRoute.inner, function () {
             var left = (this.x-1)*size;
@@ -229,11 +231,13 @@ TDVN.Map = function (dimension/*[x,y]*/, size) {
                 top: top
             });
 
-            anchor.clone().addClass('InnerPathMarker').text($('.InnerPathMarker').length == 0 ? 2 : 'x').css({
-                background: '#eee',
-                left: left,
-                top: top
-            }).appendTo(map);
+            if ( TDVN.debug ) {
+                anchor.clone().addClass('InnerPathMarker').text($('.InnerPathMarker').length == 0 ? 2 : 'x').css({
+                    background: '#eee',
+                    left: left,
+                    top: top
+                }).appendTo(map);
+            }
         });
         return pos;
     }
@@ -297,8 +301,11 @@ TDVN.MapRoute = function (startPoint/*object{x,y}*/, length, axis/*String x|y*/,
 
 TDVN.MapTower = function (config) {
     var self = this;
+    var builtTower;
     
     this.build = function (tower) {
+        if ( builtTower !== undefined ) { builtTower.destroy(); }
+        builtTower = tower;
         self.obj.html(tower.obj);
         tower.setDamageArea(config.x, config.y);
     }
@@ -307,10 +314,5 @@ TDVN.MapTower = function (config) {
         self.obj = $('<div class="MapTower"></div>');
         self.x = config.x;
         self.y = config.y;
-
-        self.obj.on('click', function (e) {
-            alert('Show popup for user to choose tower');
-            return false;
-        });
     }();
 }

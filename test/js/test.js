@@ -1,7 +1,16 @@
+TDVN.MapLoader = {
+    config: {
+        x: 32,
+        y: 16,
+        size: 25
+    }
+}
+TDVN.debug = true;
+
 jQuery(document).ready(function () {
     (function ($) {
         var testcaseID = window.location.search.substr(1) || 1;
-        var testcases = $('#testcases');
+        var testcases = $('<ul id="testcases"></ul>').prependTo('body');
         var testcaseLnk = $('<li><a href="" title=""></a>');
         for ( var i = 0; i < TDVN.Testcase.route.length; i++ ) {
             var clone = testcaseLnk.clone();

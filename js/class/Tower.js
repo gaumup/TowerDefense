@@ -93,8 +93,13 @@ TDVN.Tower = function (type, config) {
     }
 
     //public
+    this.uuid = new TDVN.Algorithm.UUID;
     this.addEffect = function (name, callback) {
         this.options.effect[name] = callback;
+    }
+    this.destroy = function () {
+        self.unsub(['creepRunning', 'creepDestroyed']);
+        self = null;
     }
     //public getter
     this.getSpeed = function () { return this.options.speed; }
@@ -120,10 +125,6 @@ TDVN.Tower = function (type, config) {
     return function () {
         options = $.extend(true, options, config);
         self.obj = $('<div class="Tower '+type+'"></div>');
-        self.obj.on('click', function (e) {
-            //alert('Show|Hide tower effects list');
-            e.stopPropagation();
-        });
         var towerRange = $('<div class="TowerRange"></div>');
         TDVN.Mediator.installTo(self);
         self.sub('creepRunning', function (creep) {

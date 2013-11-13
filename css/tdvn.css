@@ -1,0 +1,331 @@
+#tdvnMap {
+    border: none;
+    background: url(../images/tdvn/bg.jpg) no-repeat 0 0;
+}
+.MapRoute {
+    background: transparent;
+    opacity: 0;
+    -moz-opacity: 0;
+    -webkit-opacity: 00
+}
+
+/* TOWER PLACEHOLDER */
+    .MapTower {
+        background: url(../images/tdvn/dat-trong.png) no-repeat 0 0;
+        width: 80px;
+        height: 80px;
+        cursor: pointer;
+        opacity: 0.9;
+        -moz-opacity: 0.9;
+        -webkit-opacity: 0.9;
+    }
+    .MapTower:hover {
+        opacity: 1;
+        -moz-opacity: 1;
+        -webkit-opacity: 1;
+    }
+
+/* TOWER */
+    .Tower {
+        width: 80px;
+        height: 80px;
+        opacity: 1;
+        -moz-opacity: 1;
+        -webkit-opacity: 1;
+    }
+    .Lua {
+        background: url(../images/tdvn/thap-lua.png) no-repeat 0 0;
+    }
+    .Bang {
+        background: url(../images/tdvn/thap-bang.png) no-repeat 0 0;
+    }
+    .SamSet {
+        background: url(../images/tdvn/thap-set.png) no-repeat 0 0;
+    }
+    .Kiem {
+        background: url(../images/tdvn/thap-kiem.png) no-repeat 0 0;
+    }
+    .Da {
+        background: url(../images/tdvn/thap-da.png) no-repeat 0 0;
+    }
+    .Phao {
+        background: url(../images/tdvn/thap-phao.png) no-repeat 0 0;
+    }
+    .Ten {
+        background: url(../images/tdvn/thap-ten.png) no-repeat 0 0;
+    }
+    .Tien {
+        background: url(../images/tdvn/thap-tien.png) no-repeat 0 0;
+    }
+
+/* TOWER's BUILDING CHOICE */
+    .CircleTower {
+        background: url(../images/tdvn/vong-tron.png) no-repeat 0 0;
+        width: 209px;
+        height: 200px;
+        position: absolute;
+        left: -1000em;
+        top: -1000em;
+        padding: 0;
+        z-index: 100;
+
+        -webkit-transform: scale(0,0);
+        -moz-transform: scale(0,0);
+        transform: scale(0,0);
+    }
+    .CircleTower.Active {
+        -webkit-transform: scale(1,1);
+        -moz-transform: scale(1,1);
+        transform: scale(1,1);
+
+        -webkit-transition: -webkit-transform .3s ease-out; 
+       -moz-transition: -moz-transform .3s ease-out; 
+       -o-transition: -o-transform .3s ease-out; 
+        transition: -webkit-transform .3s ease-out; 
+    }
+        .CircleTower li {
+            float: left;
+            list-style: none;
+        }
+            .CircleTower li a {
+                background: url(../images/tdvn/skill.png) no-repeat 0 0;
+                display: block;
+                width: 68px;
+                height: 68px;
+            }
+            .CircleTower li a.TienThap {
+                background-position: 0 -204px;
+                margin: 0 70px 55px 0;
+            }
+            .CircleTower li a.TienThap:hover {
+                background-position: -68px -204px;
+            }
+            .CircleTower li a.PhapSuThap {
+                background-position: 0 0;
+                margin-bottom: 55px;
+            }
+            .CircleTower li a.PhapSuThap:hover {
+                background-position: -68px 0;
+            }
+            .CircleTower li a.TranPhapThap {
+                background-position: 0 -68px;
+            }
+            .CircleTower li a.TranPhapThap:hover {
+                background-position: -68px -68px;
+            }
+            .CircleTower li a.PhaoThap {
+                background-position: 0 -136px;
+                margin-right: 70px;
+            }
+            .CircleTower li a.PhaoThap:hover {
+                background-position: -68px -136px;
+            }
+            .CircleTower li a.TenT {
+                background-position: -136px -204px;
+                margin-right: 70px;
+            }
+            .CircleTower li a.TenT:hover {
+                background-position: -204px -204px;
+            }
+            .CircleTower li a.TienT {
+                background-position: -272px -204px;
+            }
+            .CircleTower li a.TienT:hover {
+                background-position: -340px -204px;
+            }
+            .CircleTower li a.LuaT {
+                background-position: -136px 0;
+                margin-right: 70px;
+            }
+            .CircleTower li a.LuaT:hover {
+                background-position: -204px 0;
+            }
+            .CircleTower li a.BangT {
+                background-position: -272px 0;
+            }
+            .CircleTower li a.BangT:hover {
+                background-position: -340px 0;
+            }
+            .CircleTower li a.SamSetT {
+                background-position: -136px -68px;
+                margin-right: 70px;
+            }
+            .CircleTower li a.SamSetT:hover {
+                background-position: -204px -68px;
+            }
+            .CircleTower li a.KiemT {
+                background-position: -272px -68px;
+            }
+            .CircleTower li a.KiemT:hover {
+                background-position: -340px -68px;
+            }
+            .CircleTower li a.DaT {
+                background-position: -136px -136px;
+                margin-right: 70px;
+            }
+            .CircleTower li a.DaT:hover {
+                background-position: -204px -136px;
+            }
+            .CircleTower li a.PhaoT {
+                background-position: -272px -136px;
+            }
+            .CircleTower li a.PhaoT:hover {
+                background-position: -340px -136px;
+            }
+
+/* TOWER's BULLET */
+    .Bullet.Lua span {
+        top: 0;
+        left: -3px;
+        width: 16px;
+        height: 24px;
+        background: url(../images/tdvn/fire.gif) no-repeat 0 0;
+    }
+    .Bullet.Bang span {
+        width: 16px;
+        height: 24px;
+        top: 0;
+        left: -2px;
+        background: url(../images/tdvn/ice.gif) no-repeat 0 0;
+    }
+	.Bullet.SamSet span {
+        width: 100px;
+        height: 110px;
+        top: 0;
+        left: -2px;
+        background: url(../images/tdvn/chieu-set.gif) no-repeat 0 0;
+    }
+	.Bullet.Kiem span {
+        width: 17px;
+        height: 68px;
+        top: 0;
+        left: -2px;
+        background: url(../images/tdvn/sword.gif) no-repeat 0 0;
+    }
+	.Bullet.Da span {
+        width: 20px;
+        height: 20px;
+        top: 0;
+        left: -2px;
+        background: url(../images/tdvn/phao.gif) no-repeat 0 0;
+    }
+	.Bullet.Phao span {
+        width: 20px;
+        height: 40px;
+        top: 0;
+        left: -2px;
+        background: url(../images/tdvn/rocket.gif) no-repeat 0 0;
+    }
+	.Bullet.Ten span {
+        width: 5px;
+        height: 28px;
+        top: 0;
+        left: -2px;
+        background: url(../images/tdvn/arrow-small.gif) no-repeat 0 0;
+    }
+	.Bullet.Tien span {
+        width: 7px;
+        height: 26px;
+        top: 0;
+        left: -2px;
+        background: url(../images/tdvn/arrow-big.gif) no-repeat 0 0;
+    }
+
+/* CREEP */
+    .Creep {
+        width: 40px;
+        height: 40px;
+        text-indent: -9999px;
+        background-color: transparent;
+    }
+        .Creep .Char {
+            padding: 2px 0 0;
+            display: block;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+        }
+            .Creep .Char .Blood {
+                display: block;
+                height: 4px;
+                background: #f00;
+                margin: -10px auto 0;
+            }
+        
+        .TinyCreep .Char {
+            background: url(../images/tdvn/phapsu-move.gif) no-repeat 0 0;
+            width: 36px;
+            height: 41px;
+            margin: -20px 0 0 -18px;
+        }
+            .TinyCreep .Blood {
+                width: 30px;
+            }
+        .TinyCreep.Die .Char {
+            background: url(../images/tdvn/phapsu-die.gif) no-repeat 0 0;
+            width: 44px;
+            height: 41px;
+            margin: -20px 0 0 -22px;
+        }
+
+        .SmallCreep .Char {
+            background: url(../images/tdvn/linh04-move.gif) no-repeat 0 0;
+            width: 44px;
+            height: 44px;
+            margin: -24px 0 0 -22px;
+        }
+            .SmallCreep .Blood {
+                width: 30px;
+            }
+        .SmallCreep.Die .Char {
+            background: url(../images/tdvn/linh04-die.gif) no-repeat 0 0;
+            width: 66px;
+            height: 44px;
+            margin: -24px 0 0 -33px;
+        }
+
+        .NormalCreep .Char {
+            background: url(../images/tdvn/linh03-move.gif) no-repeat 0 0;
+            width: 56px;
+            height: 55px;
+            margin: -35px 0 0 -28px;
+        }
+            .NormalCreep .Blood {
+                width: 30px;
+            }
+        .NormalCreep.Die .Char {
+            background: url(../images/tdvn/linh03-die.gif) no-repeat 0 0;
+            width: 68px;
+            height: 55px;
+            margin: -35px 0 0 -34px;
+        }
+
+        .SuperCreep .Char {
+            background: url(../images/tdvn/boss-move.gif) no-repeat 0 0;
+            width: 162px;
+            height: 105px;
+            margin: -52px 0 0 -81px;
+        }
+            .SuperCreep .Blood {
+                width: 80px;
+            }
+        .SuperCreep.Die .Char {
+            background: url(../images/tdvn/boss-die.gif) no-repeat 0 0;
+            width: 204px;
+            height: 105px;
+            margin: -52px 0 0 -102px;
+        }
+
+.Score {
+	position: absolute;
+	top: 245px;
+	left: 878px;
+	width: 25px;
+	height: 25px;
+	z-index: 10;
+	text-align: center;
+	color: #ffef00;
+	font-size: 15px;
+	font-weight: bold;
+	text-shadow: -1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000;
+}

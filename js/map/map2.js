@@ -1,3 +1,12 @@
+TDVN.MapLoader = {
+    config: {
+        x: 32,
+        y: 16,
+        size: 25
+    }
+}
+TDVN.debug = true;
+
 jQuery(document).ready(function () {
     (function ($) {
         var startBtn = $('<button id="startBtn" class="StartBtn">Creep run</button>').appendTo('body');

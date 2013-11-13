@@ -1,8 +1,9 @@
 TDVN.Creep = function (type, config) {
     var self = this;
-    this.uuid = new TDVN.Algorithm.UUID;
-
-    //private
+	
+	//private
+	var aBlood = 0;
+	var bBlood = 0;
     var options = {
         type: '',
         speed: 0, //number of grid creep can move in a second
@@ -11,6 +12,7 @@ TDVN.Creep = function (type, config) {
     }
     
     //public
+	this.uuid = new TDVN.Algorithm.UUID;
     this.decreaseSpeed = function (amount) {
         this.speed -= amount;
     }
@@ -19,19 +21,23 @@ TDVN.Creep = function (type, config) {
 
     return function () {
         options = $.extend(true, options, config);
-        self.obj = $('<div class="Hidden Creep '+type+'">'+options.blood+'</div>');
+		self.obj = $('<div class="Hidden Creep '+type+'"><span class="Char"><em class="Blood">'+options.blood+'</em></span></div>');
+		aBlood = options.blood;
+		bBlood = parseInt(self.obj.find('.Blood').css('width'));
         TDVN.Mediator.installTo(self);
         self.sub('towerFired', function (damage, lockedTargetUUID) {
             if ( lockedTargetUUID.indexOf(self.uuid) > -1 ) {
                 if ( damage <= options.shield ) { return false; }
-
                 //console.log('Creep', self.obj.text(), '\'s blood decreased by', damage - options.shield);
                 options.blood -= (damage - options.shield);
-                self.obj.html(options.blood);
+				self.obj.find('.Blood').css('width', options.blood*bBlood/aBlood);
                 if ( options.blood <= 0 ) {
                     self.pub('creepDestroyed', self);
-                    TweenLite.killTweensOf(self.obj);
-                    self.obj.remove();
+					TweenLite.killTweensOf(self.obj);
+                    self.obj.addClass('Die');
+					setTimeout(function(){
+						self.obj.remove();
+					}, 300);
                 }
             }
         });

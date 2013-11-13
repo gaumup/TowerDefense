@@ -16,19 +16,32 @@ TDVN.Mediator = (function () {
     var publish = function (channel) {
         if ( !channels[channel] ) { return false; }
         var args = Array.prototype.slice.call(arguments, 1);
-        for (var i = 0, l = channels[channel].length; i < l; i++) {
+        for ( var i = 0, l = channels[channel].length; i < l; i++ ) {
             var subscription = channels[channel][i];
             subscription.callback.apply(subscription.context, args);
         }
         return this;
     }
 
+    var removeSubscribe = function (channelList) {
+        for ( var i = 0; i < channelList.length; i++ ) {
+            var channel = channelList[i];
+            for ( var j = 0; j < channels[channel].length; j++ ) {
+                if ( channels[channel][j].context === this ) {
+                    channels[channel].splice(j, 1)
+                }
+            }
+        }
+    }
+
     return {
         pub: publish,
         sub: subscribe,
+        unsub: removeSubscribe,
         installTo: function(obj) {
             obj.pub = publish;
             obj.sub = subscribe;
+            obj.unsub = removeSubscribe;
         }
     }
 })();
