@@ -317,20 +317,47 @@ jQuery(document).ready(function () {
         });
 
         //7. CREEP -> start running
+		var Score = $('<span class="Score">10</span>');
+		Score.appendTo(map.obj);
+		var BaoGao = $('<div class="Gao"></div>');
+		BaoGao.appendTo(map.obj);
+		var Gao = String(
+            '<span class="Gao1"></span>'+
+            '<span class="Gao2"></span>'+
+            '<span class="Gao3"></span>'+
+            '<span class="Gao4"></span>'+
+			'<span class="Gao5"></span>'+
+			'<span class="Gao6"></span>'+
+			'<span class="Gao7"></span>'+
+			'<span class="Gao8"></span>'+
+			'<span class="Gao9"></span>'+
+			'<span class="Gao10"></span>'
+        );
+		BaoGao.html(Gao);
         TDVN.Mediator.sub('creepEscaped', function (creep) { //creep escaped :(
+			var numScore = parseInt($('.Score').html()) - 1;
             creep.obj.fadeOut('medium');
+			if(numScore >= 0){
+				$('.Score').html(numScore);
+				BaoGao.children().eq(numScore).addClass('Move');
+			}
         });
         var creepRoute = map.pathToPosition(map.getCreepPath(creepHome), creepHome);
         var startBtn = $('<button id="startBtn" class="StartBtn">Creep run</button>').appendTo('body');
         startBtn.on('click', function (e) {
-            startBtn.remove();
-            $('.MapTower').addClass('Disabled');
-            circleTower.removeClass('Active');
-            TDVN.CreepQueue.flush(2, function (creeps) {
-                $.each(creeps, function (index, creep) {
-                    map.bindRoute(creep, creepRoute[index%2 == 0 ? 'rear' : 'inner']);
-                });
-            });
+			if($('.Tower').length){
+				startBtn.remove();
+				$('.MapTower').addClass('Disabled');
+				circleTower.removeClass('Active');
+				TDVN.CreepQueue.flush(2, function (creeps) {
+					$.each(creeps, function (index, creep) {
+						map.bindRoute(creep, creepRoute[index%2 == 0 ? 'rear' : 'inner']);
+					});
+				});
+			}
+			else{
+				alert('Ban chua chon thap');
+			}
         });
     })(jQuery);
 });
