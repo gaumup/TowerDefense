@@ -31,17 +31,17 @@ TDVN.Tower = function (type, config) {
         isFired = true;
         var bullet = $('<div class="Bullet '+type+'"><span></span></div>');
         var towerPos = self.obj.offset();
+        var fromPos = {
+            left: towerPos.left + TDVN.MapLoader.config.size - 1,
+            top: towerPos.top + TDVN.MapLoader.config.size - 1
+        }
         var _firingFunc_ = function () {
             $.each(targetQueue, function (index, creep) {
                 var creepPos = creep.obj.offset();
-                var creepAjustment = {x: Math.round(creep.obj.width()/2), y: Math.round(creep.obj.height()/2)};
-                var clonedBullet = bullet.clone();
-                var fromPos = {
-                    left: towerPos.left + TDVN.MapLoader.config.size - 1,
-                    top: towerPos.top + TDVN.MapLoader.config.size - 1
+                if ( creepPos.left == 0 && creepPos.top == 0 ) {
+                    return false;
                 }
-                clonedBullet.appendTo('body').css(fromPos);
-
+                var creepAjustment = {x: Math.round(creep.obj.width()/2), y: Math.round(creep.obj.height()/2)};
                 var toPos = {
                     left: creepPos.left + creepAjustment.x,
                     top: creepPos.top + creepAjustment.y,
@@ -53,6 +53,9 @@ TDVN.Tower = function (type, config) {
                 var rotation = Math.acos((a1*b1 + a2*b2)/(Math.sqrt(Math.pow(a1,2)+Math.pow(a2,2))*Math.sqrt(Math.pow(b1,2)+Math.pow(b2,2))))*180/Math.PI;
                 var z = a1*b2 - a2*b1; //matrix multiplication
                 z = Math.abs(z)/z;
+
+                var clonedBullet = bullet.clone();
+                clonedBullet.appendTo('body').css(fromPos);
                 TweenLite.to( //rotate to target at creep
                     clonedBullet,
                     0,
@@ -68,11 +71,7 @@ TDVN.Tower = function (type, config) {
                             //publish 'fired' at creep
                             self.pub('towerFired', options.damage, lockedTargetUUID);
                             
-                            //append bullet to creep
-                            creep.obj.append(clonedBullet.css({
-                                left: creepAjustment.x,
-                                top: creepAjustment.y
-                            }));
+                            
                             setTimeout(function () {
                                 clonedBullet.remove();
                             }, 100);

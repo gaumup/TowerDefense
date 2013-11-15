@@ -26,7 +26,7 @@ TDVN.Creep = function (type, config) {
 		bBlood = parseInt(self.obj.find('.Blood').css('width'));
         TDVN.Mediator.installTo(self);
         self.sub('towerFired', function (damage, lockedTargetUUID) {
-            if ( lockedTargetUUID.indexOf(self.uuid) > -1 ) {
+            if ( lockedTargetUUID.indexOf(self.uuid) > -1 && options.blood > 0 ) {
                 if ( damage <= options.shield ) { return false; }
                 //console.log('Creep', self.obj.text(), '\'s blood decreased by', damage - options.shield);
                 options.blood -= (damage - options.shield);
